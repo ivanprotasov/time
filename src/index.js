@@ -2,9 +2,10 @@ import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router } from 'react-router-dom';
+import './i18n/i18n';
+import App from './App';
 
 ReactDOM.render(
     <Router>
