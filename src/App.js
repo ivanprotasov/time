@@ -7,6 +7,7 @@ import { Button } from 'reactstrap';
 import i18n from './i18n/i18n';
 import { Switch, Route, NavLink, Redirect } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
+import WorldTime from './world-time/WorldTime.js';
 
 type Props = {
     disabled?: boolean
@@ -47,10 +48,7 @@ class App extends Component<Props> {
                 <hr />
 
                 <Switch>
-                    <Route
-                        path="/world-time"
-                        component={withNamespaces()(WorldTime)}
-                    />
+                    <Route path="/world-time" component={WorldTime} />
                     <Route
                         path="/sleeping-mode"
                         component={withNamespaces()(SleepingMode)}
@@ -86,15 +84,6 @@ class App extends Component<Props> {
         );
     }
 }
-
-function WorldTime({ t }) {
-    return (
-        <div>
-            <h2>{t('World time')}</h2>
-        </div>
-    );
-}
-
 function Alarm({ t }) {
     return (
         <div>
