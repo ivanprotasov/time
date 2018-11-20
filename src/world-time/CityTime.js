@@ -45,28 +45,22 @@ class CityTime extends Component {
 
         return (
             <div>
-                <div>
-                    <div className="delta">{this.props.gmtOffset}</div>
-                    <div className="city">{this.props.zoneName}</div>
-                    <div className="date">
-                        {this.state.date.toLocaleTimeString([], {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: false
-                        })}
+                {this.props.zoneName === '' ? (
+                    <div>Please, select time zone</div>
+                ) : (
+                    <div>
+                        <h3 className="city">{this.props.zoneName}</h3>
+                        <div>{dayStatus}</div>
+                        <div className="hours">{offsetHours}</div>
+                        <div className="date">
+                            {offsetDate.toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: false
+                            })}
+                        </div>
                     </div>
-                    <div className="date">
-                        {offsetDate.toLocaleTimeString([], {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: false
-                        })}
-                    </div>
-                    <div className="hours">{offsetHours}</div>
-                    <div className="hours">{currentDateHours}</div>
-                    <div className="hours">{offsetDateHours}</div>
-                    <div>{dayStatus}</div>
-                </div>
+                )}
             </div>
         );
     }
