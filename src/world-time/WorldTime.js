@@ -8,7 +8,11 @@ class WorldTime extends Component {
         super();
         this.state = {
             zoneNames: ['Minsk', 'Brest', 'Hrodno'],
-            selectedZone: 'Minsk'
+            zones: [],
+            selectedZone: {
+                zoneName: 'Minsk',
+                gmtOffset: 3600
+            }
         };
         this.handleClick = this.handleClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -17,13 +21,14 @@ class WorldTime extends Component {
         Axios.get(
             'http://api.timezonedb.com/v2.1/list-time-zone?key=UH8FYK83QQDI&format=json'
         ).then(response => {
-            let zones = response.data.zones.map(zone => zone.zoneName);
-            this.setState({ zoneNames: zones });
+            let zones = response.data.zones,
+                zoneNames = response.data.zones.map(zone => zone.zoneName);
+            this.setState({ zoneNames: zoneNames });
+            this.setState({ zones: zones });
         });
     }
     handleChange(event) {
-        console.log(event.target.value);
-        this.setState({ selectedZone: event.target.value });
+        this.setState({ selectedZone: this.state.zones[event.target.value] });
     }
     render() {
         const { t } = this.props;
@@ -31,12 +36,12 @@ class WorldTime extends Component {
         return (
             <div>
                 <h2>{t('World time')}</h2>
-                <h3>{this.state.selectedZone}</h3>
+                <h3>{this.state.selectedZone.zoneName}</h3>
                 <select
-                    value={this.state.selectedZone}
+                    value={this.state.selectedZone.zoneName}
                     onChange={this.handleChange}>
                     {this.state.zoneNames.map((zoneName, index) => (
-                        <option key={index} value={zoneName}>
+                        <option key={index} value={index}>
                             {zoneName}
                         </option>
                     ))}
@@ -44,7 +49,10 @@ class WorldTime extends Component {
                 <button className="button" onClick={this.handleClick}>
                     Click Me
                 </button>
-                <CityTime gmtOffset="345" zoneName="city" />
+                <CityTime
+                    gmtOffset={this.state.selectedZone.gmtOffset}
+                    zoneName={this.state.selectedZone.zoneName}
+                />
             </div>
         );
     }
