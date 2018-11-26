@@ -1,9 +1,6 @@
 // @flow
 
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import styles from './App.module.scss';
-import { Button } from 'reactstrap';
 import i18n from './i18n/i18n';
 import { Switch, Route, NavLink, Redirect } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
@@ -61,25 +58,6 @@ class App extends Component<Props> {
                     <Route path="/alarm" component={withNamespaces()(Alarm)} />
                     <Route render={() => <Redirect to="/alarm" />} />
                 </Switch>
-
-                {/*<div className={styles['App']}>*/}
-                {/*<header className={styles['App-header']}>*/}
-                {/*<img*/}
-                {/*src={logo}*/}
-                {/*className={styles['App-logo']}*/}
-                {/*alt="logo"*/}
-                {/*/>*/}
-                {/*<p>Saved1</p>*/}
-                {/*<a*/}
-                {/*className={styles['App-link']}*/}
-                {/*href="https://reactjs.org"*/}
-                {/*target="_blank"*/}
-                {/*rel="noopener noreferrer">*/}
-                {/*Learn React*/}
-                {/*</a>*/}
-                {/*<Button>Click</Button>*/}
-                {/*</header>*/}
-                {/*</div>*/}
             </div>
         );
     }

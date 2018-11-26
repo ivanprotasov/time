@@ -6,6 +6,8 @@ class CityTime extends Component {
         this.state = {
             date: new Date()
         };
+
+        this.handleClick = this.handleClick.bind(this);
     }
     componentDidMount() {
         this.timerID = setInterval(() => this.tick(), 1000);
@@ -20,17 +22,21 @@ class CityTime extends Component {
         });
     }
 
+    handleClick() {
+        this.props.onRemove(this.props.zoneName);
+    }
+
     render() {
-        let offsetMilliseconds =
-                this.state.date.getTimezoneOffset() * 1000 * 60 +
-                this.props.gmtOffset * 1000,
+        const date = this.state.date,
+            { gmtOffset, zoneName } = this.props,
+            offsetMilliseconds =
+                date.getTimezoneOffset() * 1000 * 60 + gmtOffset * 1000,
             offsetHours = offsetMilliseconds / 3600000,
-            offsetDate = new Date(
-                this.state.date.getTime() + offsetMilliseconds
-            ),
+            offsetDate = new Date(date.getTime() + offsetMilliseconds),
             offsetDateHours = offsetDate.getHours(),
-            currentDateHours = this.state.date.getHours(),
-            dayStatus;
+            currentDateHours = date.getHours();
+
+        let dayStatus;
 
         if (offsetMilliseconds < 0 && offsetDateHours > currentDateHours) {
             dayStatus = <div>Yesterday</div>;
@@ -45,11 +51,11 @@ class CityTime extends Component {
 
         return (
             <div>
-                {this.props.zoneName === '' ? (
+                {zoneName === '' ? (
                     <div>Please, select time zone</div>
                 ) : (
                     <div>
-                        <h3 className="city">{this.props.zoneName}</h3>
+                        <h3 className="city">{zoneName}</h3>
                         <div>{dayStatus}</div>
                         <div className="hours">{offsetHours}</div>
                         <div className="date">
@@ -59,6 +65,9 @@ class CityTime extends Component {
                                 hour12: false
                             })}
                         </div>
+                        <button type="button" onClick={this.handleClick}>
+                            Remove country
+                        </button>
                     </div>
                 )}
             </div>

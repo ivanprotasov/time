@@ -9,13 +9,17 @@ class WorldTime extends Component {
         super();
         this.state = {
             zones: [],
+            selectedZones: [],
             selectedZone: {
                 zoneName: '',
                 gmtOffset: 0
             },
             inputValue: ''
         };
-        this.handleChange = this.handleChange.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.handleChange = this.handleClick.bind(this);
+        this.handleRemoveCountry = this.handleRemoveCountry.bind(this);
     }
     componentDidMount() {
         Axios.get(
@@ -25,7 +29,7 @@ class WorldTime extends Component {
             this.setState({ zones: zones });
         });
     }
-    handleChange(zoneName) {
+    handleSelect(zoneName) {
         this.setState({
             selectedZone: this.state.zones.find(
                 zone => zone.zoneName === zoneName
@@ -33,50 +37,91 @@ class WorldTime extends Component {
             inputValue: zoneName
         });
     }
+    handleChange(e) {
+        this.setState({ inputValue: e.target.value });
+    }
+    handleClick() {
+        if (
+            this.state.selectedZones.find(
+                zone => zone.zoneName === this.state.selectedZone.zoneName
+            ) ||
+            !this.state.inputValue
+        )
+            return; //to improve
+
+        this.setState(prevState => {
+            return {
+                selectedZones: prevState.selectedZones.concat(
+                    this.state.selectedZone
+                ),
+                inputValue: ''
+            };
+        });
+    }
+    handleRemoveCountry(zoneName) {
+        this.setState(prevState => ({
+            selectedZones: prevState.selectedZones.filter(
+                zone => zone.zoneName !== zoneName
+            )
+        }));
+    }
     render() {
-        const { t } = this.props;
-        let worldTime;
-        if (this.state.zones.length === 0) {
-            worldTime = <div>Loading...</div>;
-        } else {
-            worldTime = (
-                <div>
-                    <ReactAutocomplete
-                        items={this.state.zones}
-                        shouldItemRender={(item, value) =>
-                            item.zoneName
-                                .toLowerCase()
-                                .indexOf(value.toLowerCase()) > -1
-                        }
-                        getItemValue={item => item.zoneName}
-                        renderItem={(item, highlighted) => (
-                            <div
-                                key={item.zoneName}
-                                style={{
-                                    backgroundColor: highlighted
-                                        ? '#eee'
-                                        : 'transparent'
-                                }}>
-                                {item.zoneName}
-                            </div>
-                        )}
-                        value={this.state.inputValue}
-                        onChange={e =>
-                            this.setState({ inputValue: e.target.value })
-                        }
-                        onSelect={this.handleChange}
-                    />
-                    <CityTime
-                        gmtOffset={this.state.selectedZone.gmtOffset}
-                        zoneName={this.state.selectedZone.zoneName}
-                    />
-                </div>
-            );
-        }
+        const { t } = this.props,
+            { zones, selectedZones, inputValue } = this.state;
         return (
             <div>
                 <h2>{t('World time')}</h2>
-                {worldTime}
+                {zones.length === 0 ? (
+                    <div>Loading...</div>
+                ) : (
+                    <div>
+                        <ReactAutocomplete
+                            items={zones}
+                            shouldItemRender={(item, value) =>
+                                item.zoneName
+                                    .toLowerCase()
+                                    .indexOf(value.toLowerCase()) > -1
+                            }
+                            getItemValue={item => item.zoneName}
+                            renderItem={(item, highlighted) => (
+                                <div
+                                    key={item.zoneName}
+                                    style={{
+                                        backgroundColor: highlighted
+                                            ? '#eee'
+                                            : 'transparent'
+                                    }}>
+                                    {item.zoneName}
+                                </div>
+                            )}
+                            value={inputValue}
+                            onChange={this.handleChange}
+                            onSelect={this.handleSelect}
+                        />
+                        <button type="button" onClick={this.handleClick}>
+                            Add country
+                        </button>
+                        {selectedZones.length ? (
+                            <ul>
+                                {selectedZones.map(
+                                    ({ zoneName, gmtOffset }) => (
+                                        <li key={zoneName}>
+                                            <CityTime
+                                                zoneName={zoneName}
+                                                gmtOffset={gmtOffset}
+                                                onRemove={
+                                                    this.handleRemoveCountry
+                                                }
+                                            />
+                                        </li>
+                                    )
+                                )}
+                            </ul>
+                        ) : (
+                            <div>Please, add country...</div>
+                        )}
+                    </div>
+                )}
             </div>
         );
     }
