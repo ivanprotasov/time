@@ -3,5 +3,13 @@
     "Alarm": "Будильник",
     "Sleeping mode": "Режим сна",
     "Stopwatch": "Секундомер",
-    "Timer": "Таймер"
+    "Timer": "Таймер",
+    "Loading...": "Загрузка...",
+    "Add region": "Добавить регион",
+    "Remove region": "Удалить регион",
+    "Please, add region...": "Пожалуйста, добавьте регион...",
+    "Sorry, wrong region data": "Ошибка данных региона",
+    "Yesterday": "Вчера",
+    "Today": "Сегодня",
+    "Tomorrow": "Завтра"
 }

@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Axios from 'axios';
 import ReactAutocomplete from 'react-autocomplete';
 import { withNamespaces } from 'react-i18next';
-import CityTime from './CityTime.js';
+import RegionTime from './RegionTime.js';
 
-class WorldTime extends Component {
+class WorldTime extends PureComponent {
     constructor() {
         super();
         this.state = {
@@ -18,7 +18,7 @@ class WorldTime extends Component {
         };
         this.handleSelect = this.handleSelect.bind(this);
         this.handleClick = this.handleClick.bind(this);
-        this.handleChange = this.handleClick.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.handleRemoveCountry = this.handleRemoveCountry.bind(this);
     }
     componentDidMount() {
@@ -72,7 +72,7 @@ class WorldTime extends Component {
             <div>
                 <h2>{t('World time')}</h2>
                 {zones.length === 0 ? (
-                    <div>Loading...</div>
+                    <div>{t('Loading...')}</div>
                 ) : (
                     <div>
                         <ReactAutocomplete
@@ -99,14 +99,14 @@ class WorldTime extends Component {
                             onSelect={this.handleSelect}
                         />
                         <button type="button" onClick={this.handleClick}>
-                            Add country
+                            {t('Add region')}
                         </button>
                         {selectedZones.length ? (
                             <ul>
                                 {selectedZones.map(
                                     ({ zoneName, gmtOffset }) => (
                                         <li key={zoneName}>
-                                            <CityTime
+                                            <RegionTime
                                                 zoneName={zoneName}
                                                 gmtOffset={gmtOffset}
                                                 onRemove={
@@ -118,7 +118,7 @@ class WorldTime extends Component {
                                 )}
                             </ul>
                         ) : (
-                            <div>Please, add country...</div>
+                            <div>{t('Please, add region...')}</div>
                         )}
                     </div>
                 )}

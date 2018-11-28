@@ -3,5 +3,13 @@
     "Alarm": "Alarm",
     "Sleeping mode": "Sleeping mode",
     "Stopwatch": "Stopwatch",
-    "Timer": "Timer"
+    "Timer": "Timer",
+    "Loading...": "Loading...",
+    "Add region": "Add region",
+    "Remove region": "Remove region",
+    "Please, add region...": "Please, add region...",
+    "Sorry, wrong region data": "Sorry, wrong region data",
+    "Yesterday": "Yesterday",
+    "Today": "Today",
+    "Tomorrow": "Tomorrow"
 }

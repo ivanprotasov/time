@@ -1,25 +1,32 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+import { withNamespaces } from 'react-i18next';
 
-class CityTime extends Component {
+class RegionTime extends PureComponent {
     constructor(props) {
         super(props);
+
         this.state = {
             date: new Date()
         };
 
         this.handleClick = this.handleClick.bind(this);
     }
+
     componentDidMount() {
         this.timerID = setInterval(() => this.tick(), 1000);
     }
+
     componentWillUnmount() {
         clearInterval(this.timerID);
     }
 
     tick() {
-        this.setState({
-            date: new Date()
-        });
+        const date = new Date();
+
+        if (this.state.date.getMinutes() !== date.getMinutes()) {
+            // set date only when minutes are changed
+            this.setState({ date: date });
+        }
     }
 
     handleClick() {
@@ -28,7 +35,7 @@ class CityTime extends Component {
 
     render() {
         const date = this.state.date,
-            { gmtOffset, zoneName } = this.props,
+            { gmtOffset, zoneName, t } = this.props,
             offsetMilliseconds =
                 date.getTimezoneOffset() * 1000 * 60 + gmtOffset * 1000,
             offsetHours = offsetMilliseconds / 3600000,
@@ -39,20 +46,20 @@ class CityTime extends Component {
         let dayStatus;
 
         if (offsetMilliseconds < 0 && offsetDateHours > currentDateHours) {
-            dayStatus = <div>Yesterday</div>;
+            dayStatus = <div>{t('Yesterday')}</div>;
         } else if (
             offsetMilliseconds > 0 &&
             offsetDateHours < currentDateHours
         ) {
-            dayStatus = <div>Tomorrow</div>;
+            dayStatus = <div>{t('Tomorrow')}</div>;
         } else {
-            dayStatus = <div>Today</div>;
+            dayStatus = <div>{t('Today')}</div>;
         }
 
         return (
             <div>
                 {zoneName === '' ? (
-                    <div>Please, select time zone</div>
+                    <div>{t('Sorry, wrong region data')}</div>
                 ) : (
                     <div>
                         <h3 className="city">{zoneName}</h3>
@@ -66,7 +73,7 @@ class CityTime extends Component {
                             })}
                         </div>
                         <button type="button" onClick={this.handleClick}>
-                            Remove country
+                            {t('Remove region')}
                         </button>
                     </div>
                 )}
@@ -75,4 +82,4 @@ class CityTime extends Component {
     }
 }
 
-export default CityTime;
+export default withNamespaces()(RegionTime);
