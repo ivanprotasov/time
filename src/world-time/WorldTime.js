@@ -1,15 +1,16 @@
 import React, { PureComponent } from 'react';
-import Axios from 'axios';
 import ReactAutocomplete from 'react-autocomplete';
 import { withNamespaces } from 'react-i18next';
 import RegionTime from './RegionTime.js';
+
+import { connect } from 'react-redux';
+import { getRegions, getZones } from '../redux/selectors';
+import { addRegion, loadTimeZones } from '../redux/actions';
 
 class WorldTime extends PureComponent {
     constructor() {
         super();
         this.state = {
-            zones: [],
-            selectedZones: [],
             selectedZone: {
                 zoneName: '',
                 gmtOffset: 0
@@ -22,16 +23,11 @@ class WorldTime extends PureComponent {
         this.handleRemoveCountry = this.handleRemoveCountry.bind(this);
     }
     componentDidMount() {
-        Axios.get(
-            'http://api.timezonedb.com/v2.1/list-time-zone?key=UH8FYK83QQDI&format=json'
-        ).then(response => {
-            let zones = response.data.zones;
-            this.setState({ zones: zones });
-        });
+        this.props.loadTimeZones();
     }
     handleSelect(zoneName) {
         this.setState({
-            selectedZone: this.state.zones.find(
+            selectedZone: this.props.zones.find(
                 zone => zone.zoneName === zoneName
             ),
             inputValue: zoneName
@@ -42,21 +38,16 @@ class WorldTime extends PureComponent {
     }
     handleClick() {
         if (
-            this.state.selectedZones.find(
-                zone => zone.zoneName === this.state.selectedZone.zoneName
+            this.props.selectedZones.find(
+                zone =>
+                    zone.content.zoneName === this.state.selectedZone.zoneName
             ) ||
             !this.state.inputValue
         )
             return; //to improve
 
-        this.setState(prevState => {
-            return {
-                selectedZones: prevState.selectedZones.concat(
-                    this.state.selectedZone
-                ),
-                inputValue: ''
-            };
-        });
+        this.props.addRegion(this.state.selectedZone);
+        this.setState({ inputValue: '' });
     }
     handleRemoveCountry(zoneName) {
         this.setState(prevState => ({
@@ -66,12 +57,12 @@ class WorldTime extends PureComponent {
         }));
     }
     render() {
-        const { t } = this.props,
-            { zones, selectedZones, inputValue } = this.state;
+        const { t, selectedZones, zones } = this.props,
+            { inputValue } = this.state;
         return (
             <div>
                 <h2>{t('World time')}</h2>
-                {zones.length === 0 ? (
+                {!zones ? (
                     <div>{t('Loading...')}</div>
                 ) : (
                     <div>
@@ -103,19 +94,15 @@ class WorldTime extends PureComponent {
                         </button>
                         {selectedZones.length ? (
                             <ul>
-                                {selectedZones.map(
-                                    ({ zoneName, gmtOffset }) => (
-                                        <li key={zoneName}>
-                                            <RegionTime
-                                                zoneName={zoneName}
-                                                gmtOffset={gmtOffset}
-                                                onRemove={
-                                                    this.handleRemoveCountry
-                                                }
-                                            />
-                                        </li>
-                                    )
-                                )}
+                                {selectedZones.map(({ id, content }) => (
+                                    <li key={id}>
+                                        <RegionTime
+                                            zoneName={content.zoneName}
+                                            gmtOffset={content.gmtOffset}
+                                            onRemove={this.handleRemoveCountry}
+                                        />
+                                    </li>
+                                ))}
                             </ul>
                         ) : (
                             <div>{t('Please, add region...')}</div>
@@ -127,4 +114,12 @@ class WorldTime extends PureComponent {
     }
 }
 
-export default withNamespaces()(WorldTime);
+export default withNamespaces()(
+    connect(
+        state => ({
+            selectedZones: getRegions(state),
+            zones: getZones(state)
+        }),
+        { addRegion, loadTimeZones }
+    )(WorldTime)
+);

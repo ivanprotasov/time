@@ -7,7 +7,8 @@ import { withNamespaces } from 'react-i18next';
 import WorldTime from './world-time/WorldTime.js';
 
 type Props = {
-    disabled?: boolean
+    disabled?: boolean,
+    t: any
 };
 
 class App extends Component<Props> {

@@ -7,10 +7,18 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import './i18n/i18n';
 import App from './App';
 
+import { Provider } from 'react-redux';
+import { store, sagaMiddleware } from './redux/store';
+import mySaga from './redux/sagas';
+
+sagaMiddleware.run(mySaga);
+
 ReactDOM.render(
-    <Router>
-        <App />
-    </Router>,
+    <Provider store={store}>
+        <Router>
+            <App />
+        </Router>
+    </Provider>,
     document.getElementById('root')
 );
 
