@@ -1,10 +1,11 @@
 // @flow
-
 import React, { Component } from 'react';
-import i18n from './i18n/i18n';
-import { Switch, Route, NavLink, Redirect } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
-import WorldTime from './world-time/WorldTime.js';
+import { Switch, Route, NavLink, Redirect } from 'react-router-dom';
+
+import i18n from './i18n/i18n';
+
+import WorldTime from './world-time/world-time/WorldTime.js';
 
 type Props = {
     disabled?: boolean,
@@ -18,28 +19,48 @@ class App extends Component<Props> {
             i18n.changeLanguage(lng);
         };
         return (
-            <div>
-                <div>
-                    <button onClick={() => changeLanguage('ru')}>ru</button>
-                    <button onClick={() => changeLanguage('en')}>en</button>
-                </div>
-                <ul>
-                    <li>
-                        <NavLink to="/world-time">{t('World time')}</NavLink>
+            <div className="container">
+                <ul className="nav">
+                    <li className="nav-item">
+                        <button
+                            className="btn btn-link nav-link"
+                            onClick={() => changeLanguage('ru')}>
+                            ru
+                        </button>
                     </li>
-                    <li>
-                        <NavLink to="/alarm">{t('Alarm')}</NavLink>
+                    <li className="nav-item">
+                        <button
+                            className="btn btn-link nav-link"
+                            onClick={() => changeLanguage('en')}>
+                            en
+                        </button>
                     </li>
-                    <li>
-                        <NavLink to="/sleeping-mode">
+                </ul>
+                <ul className="nav">
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="/world-time">
+                            {t('World time')}
+                        </NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="/alarm">
+                            {t('Alarm')}
+                        </NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="/sleeping-mode">
                             {t('Sleeping mode')}
                         </NavLink>
                     </li>
-                    <li>
-                        <NavLink to="/stopwatch">{t('Stopwatch')}</NavLink>
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="/stopwatch">
+                            {t('Stopwatch')}
+                        </NavLink>
                     </li>
-                    <li>
-                        <NavLink to="/timer">{t('Timer')}</NavLink>
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="/timer">
+                            {t('Timer')}
+                        </NavLink>
                     </li>
                 </ul>
 
@@ -63,6 +84,7 @@ class App extends Component<Props> {
         );
     }
 }
+
 function Alarm({ t }) {
     return (
         <div>

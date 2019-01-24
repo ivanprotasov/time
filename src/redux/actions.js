@@ -1,13 +1,22 @@
-import { ADD_REGION, LOAD_TIME_ZONES } from './actionTypes';
+import {
+    ADD_TIME_ZONE,
+    LOAD_TIME_ZONES,
+    REMOVE_TIME_ZONE
+} from './actionTypes';
 
 let nextRegionId = -1;
 
-export const addRegion = content => ({
-    type: ADD_REGION,
+export const addTimeZone = content => ({
+    type: ADD_TIME_ZONE,
     payload: {
         id: ++nextRegionId,
         content
     }
+});
+
+export const removeTimeZone = regionID => ({
+    type: REMOVE_TIME_ZONE,
+    payload: regionID
 });
 
 export const loadTimeZones = () => ({

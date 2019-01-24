@@ -16,3 +16,24 @@ code {
 a.active {
     color: #61dafb;
 }
+
+.input-group-inner-div > div {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    width: 1%;
+    margin-bottom: 0;
+}
+
+.input-group-inner-div > div > div {
+    z-index: 1000;
+}
+
+.custom-select {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.modal-open .modal {
+    display: block;
+}

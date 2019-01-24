@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import { withNamespaces } from 'react-i18next';
 
-class RegionTime extends PureComponent {
+import styles from './TimeZone.module.scss';
+
+class TimeZone extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -30,7 +32,7 @@ class RegionTime extends PureComponent {
     }
 
     handleClick() {
-        this.props.onRemove(this.props.zoneName);
+        this.props.onRemove(this.props.zoneID, this.props.zoneName);
     }
 
     render() {
@@ -43,37 +45,49 @@ class RegionTime extends PureComponent {
             offsetDateHours = offsetDate.getHours(),
             currentDateHours = date.getHours();
 
-        let dayStatus;
+        let dayStatus,
+            offsetHoursString =
+                offsetHours >= 0 ? '+' + offsetHours : offsetHours;
 
         if (offsetMilliseconds < 0 && offsetDateHours > currentDateHours) {
-            dayStatus = <div>{t('Yesterday')}</div>;
+            dayStatus = <span>{t('Yesterday')}</span>;
         } else if (
             offsetMilliseconds > 0 &&
             offsetDateHours < currentDateHours
         ) {
-            dayStatus = <div>{t('Tomorrow')}</div>;
+            dayStatus = <span>{t('Tomorrow')}</span>;
         } else {
-            dayStatus = <div>{t('Today')}</div>;
+            dayStatus = <span>{t('Today')}</span>;
         }
 
         return (
-            <div>
+            <div className="container">
                 {zoneName === '' ? (
                     <div>{t('Sorry, wrong region data')}</div>
                 ) : (
-                    <div>
-                        <h3 className="city">{zoneName}</h3>
-                        <div>{dayStatus}</div>
-                        <div className="hours">{offsetHours}</div>
-                        <div className="date">
-                            {offsetDate.toLocaleTimeString([], {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: false
-                            })}
+                    <div className="row">
+                        <div className="col-sm">
+                            <div>
+                                {dayStatus},&nbsp;{offsetHoursString}
+                                {t('hh')}
+                            </div>
+                            <h3 className="city">{zoneName}</h3>
                         </div>
-                        <button type="button" onClick={this.handleClick}>
-                            {t('Remove region')}
+                        <div className="col-sm">
+                            <div className={styles.RegionTime}>
+                                {offsetDate.toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    hour12: false
+                                })}
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            className="close"
+                            aria-label="Close"
+                            onClick={this.handleClick}>
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                 )}
@@ -82,4 +96,4 @@ class RegionTime extends PureComponent {
     }
 }
 
-export default withNamespaces()(RegionTime);
+export default withNamespaces()(TimeZone);

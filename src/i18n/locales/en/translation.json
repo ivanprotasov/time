@@ -6,10 +6,14 @@
     "Timer": "Timer",
     "Loading...": "Loading...",
     "Add region": "Add region",
-    "Remove region": "Remove region",
+    "Region removing...": "Region removing...",
+    "Remove region?": "Do you really want to remove {{timeZone}} region?",
     "Please, add region...": "Please, add region...",
     "Sorry, wrong region data": "Sorry, wrong region data",
     "Yesterday": "Yesterday",
     "Today": "Today",
-    "Tomorrow": "Tomorrow"
+    "Tomorrow": "Tomorrow",
+    "Yes": "Yes",
+    "No": "No",
+    "hh": "h"
 }

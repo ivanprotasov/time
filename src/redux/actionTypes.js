@@ -1,3 +1,4 @@
-export const ADD_REGION = 'DD_REGION';
+export const ADD_TIME_ZONE = 'ADD_TIME_ZONE';
+export const REMOVE_TIME_ZONE = 'REMOVE_TIME_ZONE';
 export const LOAD_TIME_ZONES = 'LOAD_TIME_ZONES';
 export const LOAD_TIME_ZONES_SUCCESS = 'LOAD_TIME_ZONES_SUCCESS';

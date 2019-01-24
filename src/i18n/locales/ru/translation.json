@@ -6,10 +6,14 @@
     "Timer": "Таймер",
     "Loading...": "Загрузка...",
     "Add region": "Добавить регион",
-    "Remove region": "Удалить регион",
+    "Region removing...": "Удаление региона...",
+    "Remove region?": "Вы действительно хотите удалить регион {{timeZone}}?",
     "Please, add region...": "Пожалуйста, добавьте регион...",
     "Sorry, wrong region data": "Ошибка данных региона",
     "Yesterday": "Вчера",
     "Today": "Сегодня",
-    "Tomorrow": "Завтра"
+    "Tomorrow": "Завтра",
+    "Yes": "Да",
+    "No": "Нет",
+    "hh": "ч"
 }
