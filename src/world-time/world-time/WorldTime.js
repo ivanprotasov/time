@@ -26,32 +26,26 @@ class WorldTime extends PureComponent {
             zoneRemoveID: '',
             zoneRemoveName: ''
         };
-        this.handleSelect = this.handleSelect.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleOpenModal = this.handleOpenModal.bind(this);
-        this.handleCloseModal = this.handleCloseModal.bind(this);
-        this.handleRemoveTimeZone = this.handleRemoveTimeZone.bind(this);
     }
 
     componentDidMount() {
         this.props.loadTimeZones();
     }
 
-    handleSelect(zoneName) {
+    handleSelect = zoneName => {
         this.setState({
             selectedZone: this.props.zones.find(
                 zone => zone.zoneName === zoneName
             ),
             inputValue: zoneName
         });
-    }
+    };
 
-    handleChange(e) {
+    handleChange = e => {
         this.setState({ inputValue: e.target.value });
-    }
+    };
 
-    handleClick() {
+    handleClick = () => {
         if (
             this.props.selectedTimeZones.find(
                 zone =>
@@ -63,24 +57,24 @@ class WorldTime extends PureComponent {
 
         this.props.addTimeZone(this.state.selectedZone);
         this.setState({ inputValue: '' });
-    }
+    };
 
-    handleOpenModal(zoneID, zoneName) {
+    handleOpenModal = (zoneID, zoneName) => {
         this.setState({
             showModal: true,
             zoneRemoveID: zoneID,
             zoneRemoveName: zoneName
         });
-    }
+    };
 
-    handleCloseModal() {
+    handleCloseModal = () => {
         this.closeModal();
-    }
+    };
 
-    handleRemoveTimeZone() {
+    handleRemoveTimeZone = () => {
         this.handleCloseModal();
         this.props.removeTimeZone(this.state.zoneRemoveID);
-    }
+    };
 
     closeModal() {
         this.setState({

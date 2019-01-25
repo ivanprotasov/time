@@ -10,8 +10,6 @@ class TimeZone extends PureComponent {
         this.state = {
             date: new Date()
         };
-
-        this.handleClick = this.handleClick.bind(this);
     }
 
     componentDidMount() {
@@ -31,9 +29,9 @@ class TimeZone extends PureComponent {
         }
     }
 
-    handleClick() {
+    handleClick = () => {
         this.props.onRemove(this.props.zoneID, this.props.zoneName);
-    }
+    };
 
     render() {
         const date = this.state.date,
