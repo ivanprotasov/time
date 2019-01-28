@@ -5,7 +5,7 @@ import { Switch, Route, NavLink, Redirect } from 'react-router-dom';
 
 import i18n from './i18n/i18n';
 
-import WorldTime from './world-time/world-time/WorldTime.js';
+import WorldTime from './components/world-time/world-time/WorldTime.js';
 
 type Props = {
     disabled?: boolean,

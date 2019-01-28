@@ -3,15 +3,14 @@ import ReactAutocomplete from 'react-autocomplete';
 import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 
-import ReactModal from 'react-modal';
-
 import TimeZone from '../time-zone/TimeZone.js';
-import { getSelectedTimeZones, getZones } from '../../redux/selectors';
+import { getSelectedTimeZones, getZones } from '../../../redux/selectors';
 import {
     addTimeZone,
     removeTimeZone,
     loadTimeZones
-} from '../../redux/actions';
+} from '../../../redux/actions';
+import ConfirmModal from '../../common/ConfirmModal';
 
 class WorldTime extends PureComponent {
     constructor() {
@@ -59,7 +58,7 @@ class WorldTime extends PureComponent {
         this.setState({ inputValue: '' });
     };
 
-    handleOpenModal = (zoneID, zoneName) => {
+    handleRemove = (zoneID, zoneName) => {
         this.setState({
             showModal: true,
             zoneRemoveID: zoneID,
@@ -71,15 +70,16 @@ class WorldTime extends PureComponent {
         this.closeModal();
     };
 
-    handleRemoveTimeZone = () => {
-        this.handleCloseModal();
+    handleConfirm = () => {
+        this.closeModal();
         this.props.removeTimeZone(this.state.zoneRemoveID);
     };
 
     closeModal() {
         this.setState({
             showModal: false,
-            zoneRemoveID: ''
+            zoneRemoveID: '',
+            zoneRemoveName: ''
         });
     }
 
@@ -138,7 +138,7 @@ class WorldTime extends PureComponent {
                                             zoneName={content.zoneName}
                                             zoneID={id}
                                             gmtOffset={content.gmtOffset}
-                                            onRemove={this.handleOpenModal}
+                                            onRemove={this.handleRemove}
                                         />
                                     </li>
                                 ))}
@@ -146,43 +146,15 @@ class WorldTime extends PureComponent {
                         ) : null}
                     </div>
                 )}
-                <ReactModal //TODO - move to common component
-                    isOpen={this.state.showModal}
-                    bodyOpenClassName="modal-open"
-                    overlayClassName="modal"
-                    className="modal-dialog"
-                    ontentLabel="Minimal Modal Example">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5>{t('Region removing...')}</h5>
-                            <button
-                                type="button"
-                                className="close"
-                                onClick={this.handleCloseModal}>
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            <p>
-                                {t('Remove region?', {
-                                    timeZone: this.state.zoneRemoveName
-                                })}
-                            </p>
-                        </div>
-                        <div className="modal-footer">
-                            <button
-                                className="btn btn-secondary"
-                                onClick={this.handleCloseModal}>
-                                {t('No')}
-                            </button>
-                            <button
-                                className="btn btn-primary"
-                                onClick={this.handleRemoveTimeZone}>
-                                {t('Yes')}
-                            </button>
-                        </div>
-                    </div>
-                </ReactModal>
+                <ConfirmModal
+                    title={t('Region removing...')}
+                    showModal={this.state.showModal}
+                    onCloseModal={this.handleCloseModal}
+                    onConfirm={this.handleConfirm}>
+                    {t('Remove region?', {
+                        timeZone: this.state.zoneRemoveName
+                    })}
+                </ConfirmModal>
             </div>
         );
     }
