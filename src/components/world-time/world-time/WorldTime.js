@@ -66,14 +66,13 @@ class WorldTime extends PureComponent {
                         {selectedTimeZones.length ? (
                             <ul className="list-group">
                                 {selectedTimeZones.map(({ id, content }) => (
-                                    <li className="list-group-item" key={id}>
-                                        <TimeZone
-                                            zoneName={content.zoneName}
-                                            zoneID={id}
-                                            gmtOffset={content.gmtOffset}
-                                            onRemove={this.handleRemove}
-                                        />
-                                    </li>
+                                    <TimeZone
+                                        key={id}
+                                        zoneName={content.zoneName}
+                                        zoneID={id}
+                                        gmtOffset={content.gmtOffset}
+                                        onRemove={this.handleRemove}
+                                    />
                                 ))}
                             </ul>
                         ) : null}

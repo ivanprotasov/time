@@ -11,15 +11,18 @@ import App from './App';
 import { Provider } from 'react-redux';
 import { store, sagaMiddleware } from './redux/store';
 import mySaga from './redux/sagas';
+import ThemeStore from './components/common/theme-store/ThemeStore';
 
 sagaMiddleware.run(mySaga);
 Modal.setAppElement(document.getElementById('root'));
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router>
-            <App />
-        </Router>
+        <ThemeStore>
+            <Router>
+                <App />
+            </Router>
+        </ThemeStore>
     </Provider>,
     document.getElementById('root')
 );

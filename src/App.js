@@ -1,41 +1,36 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Suspense, lazy, PureComponent } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { Switch, Route, NavLink, Redirect } from 'react-router-dom';
 
-import i18n from './i18n/i18n';
-
-import WorldTime from './components/world-time/world-time/WorldTime.js';
+import ThemeSwitcher from './components/common/theme-switcher/ThemeSwitcher';
+import LanguageSwitcher from './components/common/language-switcher/LanguageSwitcher';
+import { ThemeContext } from './components/common/theme-store/ThemeStore';
+import styles from './App.module.scss';
 
 type Props = {
     disabled?: boolean,
     t: any
 };
 
-class App extends Component<Props> {
+const WorldTime = lazy(() =>
+    import('./components/world-time/world-time/WorldTime.js')
+);
+
+class App extends PureComponent<Props> {
+    static contextType = ThemeContext;
+
     render() {
         const { t } = this.props;
-        const changeLanguage = lng => {
-            i18n.changeLanguage(lng);
-        };
         return (
-            <div className="container">
-                <ul className="nav">
-                    <li className="nav-item">
-                        <button
-                            className="btn btn-link nav-link"
-                            onClick={() => changeLanguage('ru')}>
-                            ru
-                        </button>
-                    </li>
-                    <li className="nav-item">
-                        <button
-                            className="btn btn-link nav-link"
-                            onClick={() => changeLanguage('en')}>
-                            en
-                        </button>
-                    </li>
-                </ul>
+            <div
+                className={[
+                    'container w100',
+                    styles['App-container'],
+                    styles[`App-${this.context.theme}-theme`]
+                ].join(' ')}>
+                <ThemeSwitcher />
+                <LanguageSwitcher />
                 <ul className="nav">
                     <li className="nav-item">
                         <NavLink className="nav-link" to="/world-time">
@@ -65,21 +60,31 @@ class App extends Component<Props> {
                 </ul>
 
                 <hr />
-
-                <Switch>
-                    <Route path="/world-time" component={WorldTime} />
-                    <Route
-                        path="/sleeping-mode"
-                        component={withNamespaces()(SleepingMode)}
-                    />
-                    <Route
-                        path="/stopwatch"
-                        component={withNamespaces()(Stopwatch)}
-                    />
-                    <Route path="/timer" component={withNamespaces()(Timer)} />
-                    <Route path="/alarm" component={withNamespaces()(Alarm)} />
-                    <Route render={() => <Redirect to="/alarm" />} />
-                </Switch>
+                <Suspense fallback={<div>Loading...</div>}>
+                    <Switch>
+                        <Route
+                            path="/world-time"
+                            component={props => <WorldTime {...props} />}
+                        />
+                        <Route
+                            path="/sleeping-mode"
+                            component={withNamespaces()(SleepingMode)}
+                        />
+                        <Route
+                            path="/stopwatch"
+                            component={withNamespaces()(Stopwatch)}
+                        />
+                        <Route
+                            path="/timer"
+                            component={withNamespaces()(Timer)}
+                        />
+                        <Route
+                            path="/alarm"
+                            component={withNamespaces()(Alarm)}
+                        />
+                        <Route render={() => <Redirect to="/alarm" />} />
+                    </Switch>
+                </Suspense>
             </div>
         );
     }

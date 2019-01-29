@@ -2,8 +2,11 @@ import React, { PureComponent } from 'react';
 import { withNamespaces } from 'react-i18next';
 
 import styles from './TimeZone.module.scss';
+import { ThemeContext } from '../../common/theme-store/ThemeStore';
 
 class TimeZone extends PureComponent {
+    static contextType = ThemeContext;
+
     constructor(props) {
         super(props);
 
@@ -57,39 +60,44 @@ class TimeZone extends PureComponent {
         } else {
             dayStatus = <span>{t('Today')}</span>;
         }
-
         return (
-            <div className="container">
-                {zoneName === '' ? (
-                    <div>{t('Sorry, wrong region data')}</div>
-                ) : (
-                    <div className="row">
-                        <div className="col-sm">
-                            <div>
-                                {dayStatus},&nbsp;{offsetHoursString}
-                                {t('hh')}
+            <li
+                className={[
+                    'list-group-item',
+                    styles[`TimeZone-${this.context.theme}-theme`]
+                ].join(' ')}>
+                <div className="container">
+                    {zoneName === '' ? (
+                        <div>{t('Sorry, wrong region data')}</div>
+                    ) : (
+                        <div className="row">
+                            <div className="col-sm">
+                                <div>
+                                    {dayStatus},&nbsp;{offsetHoursString}
+                                    {t('hh')}
+                                </div>
+                                <h3 className="city">{zoneName}</h3>
                             </div>
-                            <h3 className="city">{zoneName}</h3>
-                        </div>
-                        <div className="col-sm">
-                            <div className={styles.RegionTime}>
-                                {offsetDate.toLocaleTimeString([], {
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    hour12: false
-                                })}
+                            <div className="col-sm">
+                                <div className={styles.TimeZone}>
+                                    {offsetDate.toLocaleTimeString([], {
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false
+                                    })}
+                                </div>
                             </div>
+                            <button
+                                type="button"
+                                className="close"
+                                aria-label="Close"
+                                onClick={this.handleClick}>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <button
-                            type="button"
-                            className="close"
-                            aria-label="Close"
-                            onClick={this.handleClick}>
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                )}
-            </div>
+                    )}
+                </div>
+            </li>
         );
     }
 }
