@@ -1,7 +1,7 @@
 // @flow
 import React, { Suspense, lazy, PureComponent } from 'react';
 import { withNamespaces } from 'react-i18next';
-import { Switch, Route, NavLink, Redirect } from 'react-router-dom';
+import { Switch, Route, NavLink } from 'react-router-dom';
 
 import ThemeSwitcher from './components/common/theme-switcher/ThemeSwitcher';
 import LanguageSwitcher from './components/common/language-switcher/LanguageSwitcher';
@@ -67,6 +67,7 @@ class App extends PureComponent<Props> {
                             component={props => <WorldTime {...props} />}
                         />
                         <Route
+                            exact
                             path="/sleeping-mode"
                             component={withNamespaces()(SleepingMode)}
                         />
@@ -82,7 +83,10 @@ class App extends PureComponent<Props> {
                             path="/alarm"
                             component={withNamespaces()(Alarm)}
                         />
-                        <Route render={() => <Redirect to="/alarm" />} />
+                        <Route
+                            path="/"
+                            component={props => <WorldTime {...props} />}
+                        />
                     </Switch>
                 </Suspense>
             </div>
